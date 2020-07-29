@@ -18,6 +18,8 @@ pip install -e .[tests,build]
 Say you have a class inheriting from multiple parent classes, and you would like a function for each parent. With `supers` this becomes as easy as:
 
 ```python
+from supers import supers
+
 class Parent1:
     def __init__(self, m:float):
         self.m1 = m * 1
