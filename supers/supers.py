@@ -27,13 +27,18 @@ class _Supers:
 
 
 def supers(owner):
-    """Returns an object, which will broadcast methods called on it to all parent classes of owner. The results are subsequently returned in a list. 
+    """ Returns an object, which will broadcast methods called on it
+        to all parent classes of owner.
+        The results are subsequently returned in a list.
 
     Args:
         owner (object): A childclass with at least one parent
 
     Returns:
-        object: object, which will broadcast methods called on it to all parent classes of owner. The results are subsequently returned in a list. 
+        object:
+            object, which will broadcast methods called on it
+            to all parent classes of owner.
+            The results are subsequently returned in a list.
     """
     superclasses = type(owner).mro()[1:-1]
     return _Supers(owner=owner, superclasses=superclasses)
