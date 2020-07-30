@@ -46,5 +46,4 @@ def supers(owner):
             The results are subsequently returned in a list.
     """
     t = owner if type(owner) in [type, ABCMeta] else type(owner)
-    superclasses = t.mro()[1:-1]
-    return _Supers(owner=owner, superclasses=superclasses)
+    return _Supers(owner=owner, superclasses=t.__bases__)
