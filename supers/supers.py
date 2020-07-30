@@ -1,4 +1,5 @@
 from typing import List, Optional, Any
+from abc import ABCMeta
 
 
 class _Supers:
@@ -44,6 +45,6 @@ def supers(owner):
             to all parent classes of owner.
             The results are subsequently returned in a list.
     """
-    t = owner if type(owner) == type else type(owner)
+    t = owner if type(owner) in [type, ABCMeta] else type(owner)
     superclasses = t.mro()[1:-1]
     return _Supers(owner=owner, superclasses=superclasses)

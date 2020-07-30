@@ -1,3 +1,4 @@
+from abc import ABC, abstractmethod
 from supers import supers
 import pytest
 
@@ -41,7 +42,13 @@ def test_basics():
 
 
 def test_static_methods():
-    class Parent1:
+    class Abstract(ABC):
+        @staticmethod
+        @abstractmethod
+        def value():
+            ...
+
+    class Parent1(Abstract):
         @staticmethod
         def value():
             return 1
@@ -49,7 +56,7 @@ def test_static_methods():
         def other(self):
             return 0
 
-    class Parent2:
+    class Parent2(Abstract):
         @staticmethod
         def value():
             return 2
