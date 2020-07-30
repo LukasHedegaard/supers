@@ -2,7 +2,7 @@ from supers import supers
 import pytest
 
 
-def test_supers():
+def test_basics():
     class Parent1:
         def __init__(self, m: float):
             self.m1 = m * 1
@@ -38,3 +38,31 @@ def test_supers():
 
     with pytest.raises(AttributeError):
         c.dummy()  # type: ignore
+
+
+def test_static_methods():
+    class Parent1:
+        @staticmethod
+        def value():
+            return 1
+
+        def other(self):
+            return 0
+
+    class Parent2:
+        @staticmethod
+        def value():
+            return 2
+
+    class Child(Parent1, Parent2):
+        @staticmethod
+        def values():
+            return supers(Child).value()
+
+    c = Child()
+
+    # Parent1.mult is called as expected
+    assert c.value() == 1
+
+    # Each parent is called and results are returned in a list
+    assert c.values() == Child.values() == [1, 2]
