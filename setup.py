@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setup(
     name="supers",
-    version="0.1.4",
+    version="0.1.5",
     author="Lukas Hedegaard",
     description="Call a function in all superclasses as easy as `supers(self).foo(42)`",
     long_description=long_description,

@@ -20,7 +20,9 @@ class _Supers:
             for s in self._superclasses:
                 if hasattr(s, called_method):
                     method = getattr(s, called_method)
-                    if isinstance(s.__dict__[called_method], staticmethod):
+                    if called_method in s.__dict__ and isinstance(
+                        s.__dict__[called_method], staticmethod
+                    ):
                         r = method(*args, **kwargs)  # omit self
                     else:
                         r = method(self._owner, *args, **kwargs)  # pass on owner self
