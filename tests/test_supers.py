@@ -73,3 +73,33 @@ def test_static_methods():
 
     # Each parent is called and results are returned in a list
     assert c.values() == Child.values() == [1, 2]
+
+
+def test_slicing():
+    class Parent1:
+        def value(self):
+            return 1
+
+    class Parent2:
+        def value(self):
+            return 2
+
+    class Parent3:
+        def value(self):
+            return 3
+
+    class Child(Parent1, Parent2, Parent3):
+        def values(self):
+            return supers(Child).value()
+
+    c = Child()
+
+    # Single
+    assert supers(c)[1].value() == [2]
+
+    # Slice
+    assert supers(c)[1:].value() == [2, 3]
+
+    # Error scenario
+    with pytest.raises(IndexError):
+        supers(c)["1"]

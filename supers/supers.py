@@ -1,5 +1,6 @@
 from typing import List, Optional, Any
 from abc import ABCMeta
+from typing import overload
 
 
 class _Supers:
@@ -29,6 +30,16 @@ class _Supers:
             return results
 
         return wrapper
+
+    def __getitem__(self, i) -> "_Supers":
+        if type(i) == int:
+            new_superclasses = [self._superclasses[i]]
+        elif type(i) == slice:
+            new_superclasses = self._superclasses[i]
+        else:
+            raise IndexError("Index of type {} is not supported".format(type(i)))
+
+        return _Supers(owner=self._owner, superclasses=new_superclasses)
 
 
 def supers(owner):
