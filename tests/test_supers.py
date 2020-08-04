@@ -68,8 +68,10 @@ def test_static_methods():
 
     c = Child()
 
-    # Parent1.mult is called as expected
+    # Parent1.value is called as expected
     assert c.value() == 1
+
+    assert c.other() == 0
 
     # Each parent is called and results are returned in a list
     assert c.values() == Child.values() == [1, 2]

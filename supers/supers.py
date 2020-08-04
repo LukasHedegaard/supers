@@ -1,6 +1,5 @@
 from typing import List, Optional, Any
 from abc import ABCMeta
-from typing import overload
 
 
 class _Supers:
