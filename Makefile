@@ -39,6 +39,7 @@ test:
 
 ## Lint the code
 lint:
+	black -l 88 .
 	flake8 . --max-complexity=12 --max-line-length=88 --select=C,E,F,W,B,B950,BLK --ignore=E203,E231,E501,W503
 
 ## Build library
