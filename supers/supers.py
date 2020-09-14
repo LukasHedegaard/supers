@@ -2,6 +2,17 @@ from typing import List, Optional, Any
 from abc import ABCMeta
 
 
+def get_method_owner(cls, method_name):
+    if method_name in cls.__dict__:
+        return cls
+    else:
+        for base in cls.__bases__:
+            owner = get_method_owner(base, method_name)
+            if owner:
+                return owner
+    return None
+
+
 class _Supers:
     def __init__(self, *args, **kwargs):
         """ To initialize, use _Supers(owner=self, superclasses=superclasses)
@@ -13,14 +24,15 @@ class _Supers:
         else:
             self.__getattr__("__init__")(*args, **kwargs)
 
-    def __getattr__(self, called_method: str):
+    def __getattr__(self, method_name: str):
         def wrapper(*args, **kwargs) -> Optional[List[Any]]:
             results = []
             for s in self._superclasses:
-                if hasattr(s, called_method):
-                    method = getattr(s, called_method)
-                    if called_method in s.__dict__ and isinstance(
-                        s.__dict__[called_method], staticmethod
+                if hasattr(s, method_name):
+                    method = getattr(s, method_name)
+                    method_owner = get_method_owner(s, method_name)
+                    if method_owner and isinstance(
+                        method_owner.__dict__[method_name], staticmethod
                     ):
                         r = method(*args, **kwargs)  # omit self
                     else:

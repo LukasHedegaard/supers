@@ -48,6 +48,10 @@ def test_static_methods():
         def value():
             ...
 
+        @staticmethod
+        def inherited_static():
+            return 42
+
     class Parent1(Abstract):
         @staticmethod
         def value():
@@ -75,6 +79,8 @@ def test_static_methods():
 
     # Each parent is called and results are returned in a list
     assert c.values() == Child.values() == [1, 2]
+
+    assert supers(Child).inherited_static() == [42, 42]
 
 
 def test_slicing():
