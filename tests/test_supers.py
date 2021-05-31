@@ -126,11 +126,19 @@ def test_only_call_if_sufficient_args_given():
         def __init__(self):
             self.m3 = 42
 
-    class Parent4:  # Called, has default args
+    class Parent4:  # Called: Has default args
         def __init__(self, m: float, n: float = 2):
             self.m4 = m * n
 
-    class Child(Parent1, Parent2, Parent3, Parent4):
+    class Parent5:  # Called: takes variable number of args
+        def __init__(self, *args):
+            self.m5 = 52
+
+    class Parent6:  # Called: takes variable number of kwargs
+        def __init__(self, m, **kwargs):
+            self.m6 = 6 * m
+
+    class Child(Parent1, Parent2, Parent3, Parent4, Parent5, Parent6):
         def __init__(self, m):
             supers(self).__init__(m)
 
@@ -141,3 +149,5 @@ def test_only_call_if_sufficient_args_given():
     assert not hasattr(c, "m2")
     assert not hasattr(c, "m3")
     assert c.m4 == 20
+    assert c.m5 == 52
+    assert c.m6 == 60

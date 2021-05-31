@@ -16,11 +16,17 @@ def get_method_owner(cls, method_name):
 
 def args_match(method, args: list, kwargs: dict, include_self=False):
     num_given = len(args) + len(kwargs)
-    parameters = inspect.signature(method).parameters
-    num_needed = len(
-        [True for v in parameters.values() if v.default is inspect.Parameter.empty]
-    ) - int(include_self)
-    num_givable = len(parameters) - int(include_self)
+    spec = inspect.getfullargspec(method)
+    num_needed = (
+        (len(spec.args) if spec.args else 0)
+        - (len(spec.defaults) if spec.defaults else 0)
+        - int(include_self)
+    )
+    num_givable = len(spec.args) - int(include_self)
+    if spec.varargs and args:
+        num_givable = float("inf")
+    if spec.varkw and kwargs:
+        num_givable = float("inf")
     return num_given <= num_givable and num_given >= num_needed
 
 
