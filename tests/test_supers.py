@@ -111,3 +111,33 @@ def test_slicing():
     # Error scenario
     with pytest.raises(IndexError):
         supers(c)["1"]
+
+
+def test_only_call_if_sufficient_args_given():
+    class Parent1:
+        def __init__(self, m: float = 42):
+            self.m1 = m * 1
+
+    class Parent2:  # Not called: Lacks args
+        def __init__(self, m: float, n: float):
+            self.m2 = m * n
+
+    class Parent3:  # Not called: Too many args
+        def __init__(self):
+            self.m3 = 42
+
+    class Parent4:  # Called, has default args
+        def __init__(self, m: float, n: float = 2):
+            self.m4 = m * n
+
+    class Child(Parent1, Parent2, Parent3, Parent4):
+        def __init__(self, m):
+            supers(self).__init__(m)
+
+    c = Child(m=10)
+
+    # Parent attributes were updated
+    assert c.m1 == 10
+    assert not hasattr(c, "m2")
+    assert not hasattr(c, "m3")
+    assert c.m4 == 20

@@ -1,5 +1,6 @@
 from typing import List, Optional, Any
 from abc import ABCMeta
+import inspect
 
 
 def get_method_owner(cls, method_name):
@@ -10,7 +11,17 @@ def get_method_owner(cls, method_name):
             owner = get_method_owner(base, method_name)
             if owner:
                 return owner
-    return None
+    return None  # pragma: no cover
+
+
+def args_match(method, args: list, kwargs: dict, include_self=False):
+    num_given = len(args) + len(kwargs)
+    parameters = inspect.signature(method).parameters
+    num_needed = len(
+        [True for v in parameters.values() if v.default is inspect.Parameter.empty]
+    ) - int(include_self)
+    num_givable = len(parameters) - int(include_self)
+    return num_given <= num_givable and num_given >= num_needed
 
 
 class _Supers:
@@ -29,14 +40,17 @@ class _Supers:
             results = []
             for s in self._superclasses:
                 if hasattr(s, method_name):
+                    r = None
                     method = getattr(s, method_name)
                     method_owner = get_method_owner(s, method_name)
                     if method_owner and isinstance(
                         method_owner.__dict__[method_name], staticmethod
-                    ):
-                        r = method(*args, **kwargs)  # omit self
-                    else:
-                        r = method(self._owner, *args, **kwargs)  # pass on owner self
+                    ):  # omit self
+                        if args_match(method, args, kwargs):
+                            r = method(*args, **kwargs)
+                    else:  # pass on owner self
+                        if args_match(method, args, kwargs, include_self=True):
+                            r = method(self._owner, *args, **kwargs)
                     if r is not None:
                         results.append(r)
 
@@ -62,6 +76,7 @@ def supers(owner):
 
     Args:
         owner (object): A childclass with at least one parent
+        strict (bool): Whether argument count should match exactly
 
     Returns:
         object:
