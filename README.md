@@ -1,4 +1,4 @@
-# Supers: Call a function in all superclasses as easy as `supers(self).foo(42)`
+# 🦸‍♂️ Supers: Call a function in all superclasses as easy as `supers(self).foo(42)`
 
 ![Python package](https://github.com/LukasHedegaard/supers/workflows/Python%20package/badge.svg) 
 [![codecov](https://codecov.io/gh/LukasHedegaard/supers/branch/master/graph/badge.svg)](https://codecov.io/gh/LukasHedegaard/datasetops) 
