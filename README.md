@@ -15,7 +15,7 @@ pip install -e .[tests,build]
 ```
 
 ## Example
-Say you have a class inheriting from multiple parent classes, and you would like a function for each parent. With `supers` this becomes as easy as:
+Say you have a class inheriting from multiple parent classes, and you would like to call a function for each parent. With `supers` this becomes as easy as:
 
 ```python
 from supers import supers
